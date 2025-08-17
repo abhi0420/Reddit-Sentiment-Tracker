@@ -1,14 +1,37 @@
 import praw
 import pandas as pd
 import os
+from dotenv import load_dotenv  
+
+load_dotenv()
 
 def fetch_reddit_data(search_term, subreddit = "",limit= 100):
+
     reddit = praw.Reddit(client_id=os.getenv("REDDIT_CLIENT_ID"),
                          client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
-                         user_agent=os.getenv("REDDIT_USER_AGENT"))
+                         user_agent=os.getenv("REDDIT_USER_AGENT"),
+                         username=os.getenv("REDDIT_USERNAME"),
+                         password=os.getenv("REDDIT_PASSWORD"))
+    if subreddit == "":
+        subreddit = "all"
     submissions = reddit.subreddit(subreddit).search(search_term, limit=limit)
     data = []
     for submission in submissions:
-        data.append({"title": submission.title, 
-                     "score": submission.score})
+        data.append({"id": submission.id,
+                     "created_on": submission.created_utc,
+                     "subreddit": submission.subreddit,
+                     "author": submission.author,
+                     "title": submission.title,
+                     "text": submission.selftext,
+                     "score": submission.score,
+                     "url": submission.url,
+                     "is_self": submission.is_self })
     return pd.DataFrame(data)
+
+
+def main():
+    df = fetch_reddit_data("Python", limit=10)
+    print(df)
+
+if __name__ == "__main__":
+    main()
