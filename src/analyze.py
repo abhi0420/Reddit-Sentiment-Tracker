@@ -22,7 +22,7 @@ def analyze_sentiment(text, aspect=None):
     max_score = max(labels, key = labels.get)
     check_sarcasm = analyze_sarcasm(text)
     if check_sarcasm:
-        if labels[max_score].lower() ==  "positive":
+        if labels[max_score].lower() == "positive":
             labels[max_score] = "negative"
         else:
             labels[max_score] = "positive"
@@ -36,7 +36,7 @@ def analyze_sarcasm(text):
     return False
 
 if __name__ == "__main__":
-    text = "You are great at making terrible decisions"
+    text = "This message popped up on my TV after opening the Crave app. Like I guess I'll go buy a new tv on September 15th"
     aspect = "transformers"
     result = analyze_sentiment(text, aspect)
     print(result)

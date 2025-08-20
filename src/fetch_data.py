@@ -19,6 +19,7 @@ def fetch_reddit_data(search_term, subreddit = "",limit= 100):
     for submission in submissions:
         data.append({"id": submission.id,
                      "created_on": submission.created_utc,
+                     "term": search_term,
                      "subreddit": submission.subreddit,
                      "author": submission.author,
                      "title": submission.title,
