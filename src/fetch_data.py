@@ -2,9 +2,11 @@ import praw
 import pandas as pd
 import os
 from dotenv import load_dotenv  
+from functools import lru_cache
 
 load_dotenv()
 
+@lru_cache(maxsize=32)
 def fetch_reddit_data(search_term, subreddit = "",limit= 100):
 
     reddit = praw.Reddit(client_id=os.getenv("REDDIT_CLIENT_ID"),
