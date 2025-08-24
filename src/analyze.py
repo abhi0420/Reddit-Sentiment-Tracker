@@ -37,7 +37,7 @@ def analyze_sentiment(text, title, aspect=None):
         title = ""
     full_text = (title + "\n" + text).strip().lower()
     if aspect and aspect.lower() in full_text.lower():
-        print(f"Aspect '{aspect}' found in text or title.")
+        #print(f"Aspect '{aspect}' found in text or title.")
         inputs = tokenizer(text, text_pair=aspect, return_tensors="pt", truncation=True)
         outputs = model(**inputs)
         probs =  F.softmax(outputs.logits, dim=-1)[0].cpu().tolist()

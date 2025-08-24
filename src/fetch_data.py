@@ -7,16 +7,24 @@ from functools import lru_cache
 load_dotenv()
 
 @lru_cache(maxsize=32)
+def get_reddit_instance():
+    return praw.Reddit(client_id=os.getenv("REDDIT_CLIENT_ID"),
+                       client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
+                       user_agent=os.getenv("REDDIT_USER_AGENT"),
+                       username=os.getenv("REDDIT_USERNAME"),
+                       password=os.getenv("REDDIT_PASSWORD"))   
+
+
 def fetch_reddit_data(search_term, subreddit = "",limit= 100):
 
-    reddit = praw.Reddit(client_id=os.getenv("REDDIT_CLIENT_ID"),
-                         client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
-                         user_agent=os.getenv("REDDIT_USER_AGENT"),
-                         username=os.getenv("REDDIT_USERNAME"),
-                         password=os.getenv("REDDIT_PASSWORD"))
+    reddit = get_reddit_instance()
     if subreddit == "":
         subreddit = "all"
-    submissions = reddit.subreddit(subreddit).search(search_term, limit=limit)
+    try:
+        submissions = reddit.subreddit(subreddit).search(search_term, limit=limit)
+    except Exception as e:
+        print(f"Error fetching submissions: {e}")
+        return pd.DataFrame()  
     data = []
     for submission in submissions:
         data.append({"id": submission.id,
@@ -28,7 +36,8 @@ def fetch_reddit_data(search_term, subreddit = "",limit= 100):
                      "text": submission.selftext,
                      "score": submission.score,
                      "url": submission.url,
-                     "is_self": submission.is_self })
+                     "is_self": submission.is_self,
+                     "permalink": f"https://www.reddit.com{submission.permalink}"})
     return pd.DataFrame(data)
 
 
