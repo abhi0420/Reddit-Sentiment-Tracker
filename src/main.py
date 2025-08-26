@@ -3,7 +3,7 @@ from analyze import analyze_sentiment
 from insights import summarize_df, plot_trend
 
 def main():
-    reddit_df = fetch_reddit_data("Trump", "usa", limit=40)
+    reddit_df = fetch_reddit_data("Trump", "usa", limit=140)
     print("Reddit Df : ",reddit_df)
     sentiment_results = []
     reddit_df.loc[reddit_df['text'].str.len() == 0, "text"] = reddit_df["title"]

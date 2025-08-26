@@ -9,8 +9,8 @@ def summarize_df(reddit_df : pd.DataFrame) -> dict :
     avg_sentiment = reddit_df["sentiment_score"].mean()
     summary["average_sentiment"] = float(avg_sentiment) 
 
-    reddit_df["created_on"] = pd.to_datetime(reddit_df["created_on"])
-    trend = reddit_df.groupby(reddit_df["created_on"].dt.date)["sentiment_score"].mean()
+    reddit_df["created_on"] = pd.to_datetime(reddit_df["created_on"], unit='s', utc=True)
+    trend = (reddit_df.set_index("created_on").sort_index().resample("D")["sentiment_score"].mean().dropna())
 
     summary["trend"] = trend  
 
@@ -46,5 +46,5 @@ def plot_trend(trend : pd.Series):
     title = "Sentiment over time"
     plt.ylabel("Sentiment Score")
     plt.xlabel("Date")
-    trend.plot(kind='line', title=title, marker='o')
+    trend.plot(marker="o", title="Average Sentiment (hourly)")
     plt.show()

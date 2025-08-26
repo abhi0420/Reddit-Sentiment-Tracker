@@ -21,7 +21,7 @@ def fetch_reddit_data(search_term, subreddit = "",limit= 100):
     if subreddit == "":
         subreddit = "all"
     try:
-        submissions = reddit.subreddit(subreddit).search(search_term, limit=limit)
+        submissions = reddit.subreddit(subreddit).search(search_term, sort="new",limit=limit)
     except Exception as e:
         print(f"Error fetching submissions: {e}")
         return pd.DataFrame()  
