@@ -33,21 +33,36 @@ def label_from_signed(score : float) -> dict[str, float]:
 
 @torch.inference_mode()
 def analyze_sentiment(text, title, aspect=None):
+    
     if not title:
         title = ""
-    full_text = (title + "\n" + text).strip().lower()
+    full_text = (title + "\n" + text).strip()
+    
     if aspect and aspect.lower() in full_text.lower():
-        #print(f"Aspect '{aspect}' found in text or title.")
-        inputs = tokenizer(text, text_pair=aspect, return_tensors="pt", truncation=True)
+        # Use the correct tokenizer for length checking
+        tokens = tokenizer.encode(full_text, truncation=False)
+        if len(tokens) > tokenizer.model_max_length:
+            aspect_index = full_text.lower().index(aspect.lower())
+            start_index = max(0, aspect_index - tokenizer.model_max_length // 2)
+            end_index = start_index + tokenizer.model_max_length
+            full_text = full_text[start_index:end_index]
+        
+        inputs = tokenizer(full_text, text_pair=aspect, return_tensors="pt", truncation=True)
         outputs = model(**inputs)
         probs =  F.softmax(outputs.logits, dim=-1)[0].cpu().tolist()
         id2label = {int(k): v for k, v in model.config.id2label.items()}
         label_probs = {id2label[i].lower(): probs[i] for i in range(len(probs))}
+        print(label_probs)
         score = signed_sent_score(label_probs)
         label = label_from_signed(score)
         method = "absa"
      
     else:
+        # For the roberta sentiment pipeline, truncate using character count as approximation
+        # or better yet, use the pipeline's tokenizer
+        if len(text) > 500:  # Conservative character limit
+            text = text[:500]
+            
         result = sentiment_analysis_pipeline(text)[0]
         top_label = result['label'].lower()
         top_prob = float(result['score'])
@@ -63,7 +78,12 @@ def analyze_sentiment(text, title, aspect=None):
         label = label_from_signed(score)    
         method = "generic"
 
-    check_sarcasm, sarcasm_score = analyze_sarcasm(text)
+    try:
+        if len(text) > 500:
+            text = text[:500]
+        check_sarcasm, sarcasm_score = analyze_sarcasm(text)
+    except Exception as e:
+        check_sarcasm, sarcasm_score = False, 0.0
     if check_sarcasm and abs(sarcasm_score) > 0.5  :
         score = -0.75 * score
         label = label_from_signed(score)

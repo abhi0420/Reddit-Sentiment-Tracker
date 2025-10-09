@@ -6,8 +6,7 @@ class AnalyzeRequest(BaseModel):
     text :  str = Field(..., description="Keyword/Aspect to analyze"  )
     subreddit : str = Field ('all', description = "Name of Subreddit or 'all'")
     limit : int = Field(100, description = "Max no of posts to fetch, defualts to 100")
-    mode : Literal["search", "new"] = Field("search", description="'search' : reddit search api, 'new' : fetch latest posts")
-    time_filter : Literal["all", "day", "hour", "month", "week", "year"] = Field("day", description="Only for search mode")
+
 
 class Sentiment(BaseModel):
         label : Literal["POSITIVE", "NEGATIVE", "NEUTRAL"]

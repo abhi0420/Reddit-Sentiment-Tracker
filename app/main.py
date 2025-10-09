@@ -43,11 +43,33 @@ def _safe_record_from_row(row : Dict[str, Any]) -> Dict[str, Any]:
     if "sentiment_score" in rec:
         rec["sentiment_score"] = float(rec.get("sentiment_score", 0.0))
 
-    if "created_on_utc" in rec and not isinstance(rec["created_on_utc"], str):
-        rec["created_on_utc"] = pd.to_datetime(rec["created_on_utc"]).isoformat()
+    # Fix: Ensure created_on_utc is always present and properly formatted
+    if "created_on_utc" in rec:
+        if pd.isna(rec["created_on_utc"]) or rec["created_on_utc"] is None:
+            rec["created_on_utc"] = pd.Timestamp.now().isoformat()
+        elif not isinstance(rec["created_on_utc"], str):
+            rec["created_on_utc"] = pd.to_datetime(rec["created_on_utc"]).isoformat()
+    else:
+        # Add missing created_on_utc field
+        rec["created_on_utc"] = pd.Timestamp.now().isoformat()
 
+    # Fix: Convert sentiment string to numeric if Post model expects a number
+    # You'll need to map sentiment labels to numbers
+    if "sentiment" in rec and isinstance(rec["sentiment"], str):
+        sentiment_map = {"positive": 1.0, "negative": -1.0, "neutral": 0.0}
+        rec["sentiment"] = sentiment_map.get(rec["sentiment"].lower(), 0.0)
+
+    # Fix: Handle PRAW objects and ensure all fields are strings
     for col in ["title", "text", "term", "subreddit", "author", "url", "permalink"]:
-        rec[col] = str(rec.get(col, "")) if rec.get(col) is not None else ""
+        value = rec.get(col)
+        if value is None:
+            rec[col] = ""
+        elif hasattr(value, 'name'):  # PRAW Redditor object has a 'name' attribute
+            rec[col] = str(value.name)
+        elif hasattr(value, '__str__'):  # Any other object with string representation
+            rec[col] = str(value)
+        else:
+            rec[col] = ""
 
     return rec
 
@@ -56,7 +78,7 @@ def analyze(request: AnalyzeRequest):
 
     try:
         reddit_df = fetch_reddit_data(
-            request.term,
+            request.text,
             subreddit=request.subreddit,
             limit=request.limit
         )
@@ -76,19 +98,13 @@ def analyze(request: AnalyzeRequest):
 
     rows = reddit_df.to_dict(orient="records")
 
-    results : List[Dict[str,Any]] = [None] * len(rows)
-
-    with ThreadPoolExecutor(max_workers=min(MAX_WORKERS, max(1, len(rows)))) as exe:
-        futures = {
-            exe.submit(analyze_sentiment, row.get("text", ""), row.get("title", ""), row.get("term", "")): idx
-            for idx, row in enumerate(rows)
-        }
-        for future in as_completed(futures):
-            idx = futures[future]
-            try:
-                results[idx] = future.result()
-            except Exception as e:
-                results[idx] = {"label": "neutral", "score": 0.0, "sarcasm_flag" : False}
+    results = []
+    for r in reddit_df.itertuples():
+        text = r.text
+        aspect = r.term
+        title = r.title
+        sentiment_result = analyze_sentiment(text, title, aspect)
+        results.append(sentiment_result)
 
 
     for i, row in enumerate(rows):
@@ -116,6 +132,8 @@ def analyze(request: AnalyzeRequest):
     try:
         posts = [Post(**rec) for rec in safe_records]
     except Exception as e:
+        import pdb
+        pdb.set_trace()
         return JSONResponse(
             status_code=500, 
             content={
@@ -124,7 +142,7 @@ def analyze(request: AnalyzeRequest):
                 "summary": summary
             }
         )
-
+    print(posts)
     return AnalyzeResponse(posts=posts, summary=summary)
 
 
