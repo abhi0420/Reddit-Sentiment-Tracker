@@ -5,16 +5,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-DEVICE = "cuda" if torch.cuda.is_available() else -1
 
-ABSA_MODEL_NAME = "yangheng/deberta-v3-base-absa-v1.1"
-tokenizer = AutoTokenizer.from_pretrained(ABSA_MODEL_NAME)
-model = AutoModelForSequenceClassification.from_pretrained(ABSA_MODEL_NAME)
-
-sentiment_analysis_pipeline = pipeline("sentiment-analysis",model="cardiffnlp/twitter-roberta-base-sentiment-latest")
-sarcasm_detection_pipeline = pipeline("text-classification", model="cardiffnlp/twitter-roberta-base-irony")
-
-print("Models Loaded Successfully")
 
 def signed_sent_score(label_probs : dict[str, float]) -> float:
     label_probs = {k.lower() : v for k,v in label_probs.items()}
@@ -32,7 +23,7 @@ def label_from_signed(score : float) -> dict[str, float]:
     return "neutral"
 
 @torch.inference_mode()
-def analyze_sentiment(text, title, aspect=None):
+def analyze_sentiment(model,sentiment_analysis_pipeline, sarcasm_detection_pipeline, tokenizer, text, title, aspect=None):
     #print("Aspect:", aspect)
     if not title:
         title = ""
@@ -83,7 +74,7 @@ def analyze_sentiment(text, title, aspect=None):
     try:
         if len(text) > 500:
             text = text[:500]
-        check_sarcasm, sarcasm_score = analyze_sarcasm(text)
+        check_sarcasm, sarcasm_score = analyze_sarcasm(text, sarcasm_detection_pipeline)
     except Exception as e:
         check_sarcasm, sarcasm_score = False, 0.0
     if check_sarcasm and abs(sarcasm_score) > 0.5  :
@@ -92,7 +83,7 @@ def analyze_sentiment(text, title, aspect=None):
     return {"label": label, "score": score, "method": method}
 
 @torch.inference_mode()
-def analyze_sarcasm(text):
+def analyze_sarcasm(text, sarcasm_detection_pipeline):
     sarcasm = sarcasm_detection_pipeline(text)[0] 
     if sarcasm['label'] == 'irony':
         if sarcasm['score'] > 0.8:
