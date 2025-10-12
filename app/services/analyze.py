@@ -33,12 +33,13 @@ def label_from_signed(score : float) -> dict[str, float]:
 
 @torch.inference_mode()
 def analyze_sentiment(text, title, aspect=None):
-    
+    #print("Aspect:", aspect)
     if not title:
         title = ""
     full_text = (title + "\n" + text).strip()
     
     if aspect and aspect.lower() in full_text.lower():
+        print("Performing ABSA")
         # Use the correct tokenizer for length checking
         tokens = tokenizer.encode(full_text, truncation=False)
         if len(tokens) > tokenizer.model_max_length:
@@ -49,6 +50,7 @@ def analyze_sentiment(text, title, aspect=None):
         
         inputs = tokenizer(full_text, text_pair=aspect, return_tensors="pt", truncation=True)
         outputs = model(**inputs)
+        print(outputs)
         probs =  F.softmax(outputs.logits, dim=-1)[0].cpu().tolist()
         id2label = {int(k): v for k, v in model.config.id2label.items()}
         label_probs = {id2label[i].lower(): probs[i] for i in range(len(probs))}
@@ -73,7 +75,7 @@ def analyze_sentiment(text, title, aspect=None):
             label_probs = {"negative": top_prob, "positive": 1 - top_prob - 1e-6, "neutral": 1e-6}
         else:
             label_probs = {"neutral": top_prob, "positive": (1 - top_prob) / 2, "negative": (1 - top_prob) / 2}
-
+        print(label_probs)
         score = signed_sent_score(label_probs)
         label = label_from_signed(score)    
         method = "generic"

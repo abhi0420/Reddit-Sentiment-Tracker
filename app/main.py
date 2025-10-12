@@ -132,8 +132,6 @@ def analyze(request: AnalyzeRequest):
     try:
         posts = [Post(**rec) for rec in safe_records]
     except Exception as e:
-        import pdb
-        pdb.set_trace()
         return JSONResponse(
             status_code=500, 
             content={
