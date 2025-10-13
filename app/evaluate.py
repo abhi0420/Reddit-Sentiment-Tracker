@@ -15,7 +15,8 @@ def evaluate_models(absa_model, sarcasm_detection_pipeline, tokenizer):
     total_samples = len(test_data)
     accurate_sentiment = 0
     accurate_sarcasm = 0
-
+    predicted_sentiments = []
+    sarcasm_detected = []
     for i, row in test_data.iterrows():
         text = row.get('Text', "")
         title = row.get('Title', "")
@@ -33,7 +34,7 @@ def evaluate_models(absa_model, sarcasm_detection_pipeline, tokenizer):
             id2label = {int(k): v for k, v in absa_model.config.id2label.items()}
             label_probs = {id2label[i].lower(): probs[i] for i in range(len(probs))}
             predicted_sentiment = max(label_probs, key=label_probs.get)
-            
+            predicted_sentiments.append(predicted_sentiment)
             if predicted_sentiment == true_sentiment:
                 accurate_sentiment += 1
 
@@ -48,9 +49,12 @@ def evaluate_models(absa_model, sarcasm_detection_pipeline, tokenizer):
                     predicted_sarcasm = 'False'
             else:
                 predicted_sarcasm = 'False'
+            sarcasm_detected.append(predicted_sarcasm)
             if predicted_sarcasm.lower() == true_sarcasm:
                 accurate_sarcasm += 1
-        
+    test_data['Predicted Sentiment'] = predicted_sentiments
+    test_data['Predicted Sarcasm'] = sarcasm_detected
+    test_data.to_csv("Data/test_data_with_predictions.csv", index=False)  
     sentiment_accuracy = (accurate_sentiment / total_samples) if total_samples > 0 else 0
     sarcasm_accuracy = (accurate_sarcasm / total_samples) if total_samples > 0 else 0
 

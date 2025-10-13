@@ -5,7 +5,26 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
+def load_models():
 
+    DEVICE = "cuda" if torch.cuda.is_available() else -1
+
+    ABSA_MODEL_NAME = "yangheng/deberta-v3-base-absa-v1.1"
+    absa_model = AutoModelForSequenceClassification.from_pretrained(ABSA_MODEL_NAME)
+
+    sentiment_analysis_pipeline = pipeline("sentiment-analysis",model="cardiffnlp/twitter-roberta-base-sentiment-latest")
+    sarcasm_detection_pipeline = pipeline("text-classification", model="cardiffnlp/twitter-roberta-base-irony")
+
+    print("Models Loaded Successfully")
+
+    tokenizer = AutoTokenizer.from_pretrained(ABSA_MODEL_NAME)
+
+    return {
+        "absa_model": absa_model,
+        "sentiment_analysis_pipeline": sentiment_analysis_pipeline,
+        "sarcasm_detection_pipeline": sarcasm_detection_pipeline,
+        "tokenizer": tokenizer
+    }
 
 def signed_sent_score(label_probs : dict[str, float]) -> float:
     label_probs = {k.lower() : v for k,v in label_probs.items()}
@@ -91,7 +110,13 @@ def analyze_sarcasm(text, sarcasm_detection_pipeline):
     return False, sarcasm['score']
 
 if __name__ == "__main__":
-    text = "X is really great at making terrible decisions"
-    aspect = "X"
-    result = analyze_sentiment(text, "", aspect)
+    nlp_models = load_models()
+    absa_model = nlp_models.get("absa_model")
+    sentiment_analysis_pipeline = nlp_models.get("sentiment_analysis_pipeline")
+    sarcasm_detection_pipeline = nlp_models.get("sarcasm_detection_pipeline")
+    tokenizer = nlp_models.get("tokenizer")
+
+    text = "Hear me out. This might sound extreme, but I genuinely believe itâ€™s time to consider abandoning Delhi.relocating Delhiâ€™s population across smaller cities could help reduce strain on resources and make a dent in urban pollution nationwide."
+    aspect = "Delhi"
+    result = analyze_sentiment(absa_model, sentiment_analysis_pipeline, sarcasm_detection_pipeline, tokenizer, text, "HOT TAKE : Delhi Should be Abandoned.", aspect)
     print(result)
