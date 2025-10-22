@@ -3,11 +3,14 @@ from transformers import (AutoTokenizer, AutoModelForSequenceClassification,
                           Trainer, TrainingArguments, DataCollatorWithPadding)
 
 from torch.utils.data import Dataset
-
+import re
+from langdetect import detect
 import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score, classification_report
+import warnings
 
+warnings.filterwarnings("ignore")
 
 class AbsaDataset(Dataset):
     def __init__(self, data, tokenizer, max_len=512):
@@ -23,7 +26,7 @@ class AbsaDataset(Dataset):
         item = self.data.iloc[idx]
 
         encoding = self.tokenizer(item["text"],
-                                  text_pair = item["text_pair"],
+                                  item["text_pair"],
                                   truncation=True,
                                   padding = "max_length",
                                   max_length = self.max_len,
@@ -47,9 +50,61 @@ def compute_metrics(eval_pred):
         'classification_report': classification_report(labels, predictions, output_dict=True)
     }
 
-def fine_tune_model():
+def preprocess_training_data(df):
 
-    train_df = pd.read_csv("")
+    url_pattern = r'^https?://[^\s]+$'
+
+    df = df[~df['text'].str.match(url_pattern, na=False)]
+
+    def truncate_text(text, max_words=400):
+        words = str(text).split()
+        if len(words) > max_words:
+            return ' '.join(words[:max_words])
+        return text
+
+    df['text'] = df['text'].apply(truncate_text)
+
+    def is_english(text):
+        try:
+            return detect(text) == 'en'
+        except:
+            return False
+        
+    df = df[df['text'].apply(is_english)]   
+
+        
+    return df
+
+
+def fine_tune_model():
+    # Load your data
+    train_df = pd.read_csv("Data/training_data.csv")
+    
+    # Handle empty text (use title if text is empty)
+    def get_text(row):
+        text = str(row['text']) if pd.notna(row['text']) and str(row['text']).strip() != '' else ""
+        title = str(row['title']) if 'title' in row and pd.notna(row['title']) else ""
+        return text if text else title
+    
+    train_df['text'] = train_df.apply(get_text, axis=1)
+    
+    # Remove truly empty rows
+    train_df = train_df[train_df['text'].str.len() > 5]
+    
+    # 🎯 KEY: Create text_pair from your aspect column
+    train_df['text_pair'] = train_df['aspect']  # This is what you were missing!
+    
+    # Convert string labels to numbers
+    train_df['labels'] = train_df['label'].map({
+        'positive': 2, 
+        'negative': 0, 
+        'neutral': 1
+    })
+    
+    print(f"Sample of processed data:")
+    print(train_df[['text', 'text_pair', 'labels']].head())
+    
+    train_df = preprocess_training_data(train_df)
 
     train_data = train_df[:int(0.8*len(train_df))]
     val_data = train_df[int(0.8*len(train_df)):]
@@ -72,14 +127,15 @@ def fine_tune_model():
 
     training_args = TrainingArguments(
         output_dir="./fine_tuned_absa_model_v1",
-        num_train_epochs=3,
-        per_device_train_batch_size=8,
-        per_device_eval_batch_size=8,
-        warmup_steps=100,
+        num_train_epochs=1,
+        per_device_train_batch_size=2,
+        per_device_eval_batch_size=4,
+        warmup_steps=5,
         weight_decay=0.01,
         logging_dir="./logs",
-        logging_steps=10,
-        evaluation_strategy="epoch",
+        logging_steps=5,
+        eval_strategy="epoch",
+        eval_steps=20,
         save_strategy="epoch",
         load_best_model_at_end=True,
         metric_for_best_model="accuracy",
@@ -118,4 +174,3 @@ def fine_tune_model():
 
 if __name__ == "__main__":
     fine_tune_model()
-    

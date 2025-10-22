@@ -10,12 +10,11 @@ from typing import Any, Dict, List
 from schemas import AnalyzeRequest, AnalyzeResponse, Post   
 
 import pandas as pd
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
+from model_tuning import fine_tune_model
 
 app = FastAPI()
 
-MAX_WORKERS = 8
 
 @app.get("/health")
 def health():
@@ -149,30 +148,21 @@ def analyze(request: AnalyzeRequest):
     print(posts)
     return AnalyzeResponse(posts=posts, summary=summary)
 
-
+@app.post("/evaluate_model")
+def evaluate_model():
+    models = load_models()
+    absa_model = models.get("absa_model")
+    sarcasm_detection_pipeline = models.get("sarcasm_detection_pipeline")
+    tokenizer = models.get("tokenizer")
+    
+    sentiment_acc, sarcasm_acc = evaluate_models(absa_model, sarcasm_detection_pipeline, tokenizer)
+    return {
+        "sentiment_accuracy": sentiment_acc,
+        "sarcasm_accuracy": sarcasm_acc
+    }
 
 
 def main():
-    # reddit_df = fetch_reddit_data("Trump", "usa", limit=140)
-    # print("Reddit Df : ",reddit_df)
-    # sentiment_results = []
-    # reddit_df.loc[reddit_df['text'].str.len() == 0, "text"] = reddit_df["title"]
-    # for row in reddit_df.itertuples():
-    #     text = row.text
-    #     aspect = row.term
-    #     title = row.title
-    #     sentiment_result = analyze_sentiment(text, title, aspect)
-    #     sentiment_results.append(sentiment_result) 
-    # print("Sentiment Results: ", sentiment_results)
-    # reddit_df["sentiment"] = [i['label'] for i in sentiment_results]
-    # reddit_df["sentiment_score"] = [i['score'] for i in sentiment_results]
-    # print("Reddit Df with Sentiment: ", reddit_df[["text", "term", "sentiment", "sentiment_score"]])
-
-    # insights = summarize_df(reddit_df)
-    # print("Insights: ", insights)
-
-    # if "trend" in insights:
-    #     plot_trend(insights["trend"])
     models = load_models()
     absa_model = models.get("absa_model")
     sarcasm_detection_pipeline = models.get("sarcasm_detection_pipeline")
@@ -180,6 +170,11 @@ def main():
     
     sentiment_acc, sarcasm_acc = evaluate_models(absa_model, sarcasm_detection_pipeline, tokenizer)
     print(f"Sentiment Accuracy: {sentiment_acc:.4f}, Sarcasm Accuracy: {sarcasm_acc:.4f}")
+
+    if sentiment_acc < 0.50:
+        tuned_model = fine_tune_model(absa_model, tokenizer)
+        print("Tuned Model: ", tuned_model)
+
 
 
 if __name__ == "__main__":

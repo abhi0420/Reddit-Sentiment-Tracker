@@ -26,31 +26,16 @@ def load_models():
         "tokenizer": tokenizer
     }
 
-def signed_sent_score(label_probs : dict[str, float]) -> float:
-    label_probs = {k.lower() : v for k,v in label_probs.items()}
-    pos = label_probs.get("positive", 0)
-    neg = label_probs.get("negative", 0)
-    neu = label_probs.get("neutral", 0)
-    return float(max(-1.0, min(pos - neg, 1.0)))    
-
-def label_from_signed(score : float) -> dict[str, float]:
-    if score > 0.2:
-        return "positive"
-    elif score < -0.2:
-        return "negative"
-    
-    return "neutral"
 
 @torch.inference_mode()
-def analyze_sentiment(model,sentiment_analysis_pipeline, sarcasm_detection_pipeline, tokenizer, text, title, aspect=None):
-    #print("Aspect:", aspect)
+def analyze_sentiment(model, sentiment_analysis_pipeline, sarcasm_detection_pipeline, tokenizer, text, title, aspect=None):
     if not title:
         title = ""
     full_text = (title + "\n" + text).strip()
     
     if aspect and aspect.lower() in full_text.lower():
         print("Performing ABSA")
-        # Use the correct tokenizer for length checking
+        # Truncation logic (keep this part)
         tokens = tokenizer.encode(full_text, truncation=False)
         if len(tokens) > tokenizer.model_max_length:
             aspect_index = full_text.lower().index(aspect.lower())
@@ -60,46 +45,53 @@ def analyze_sentiment(model,sentiment_analysis_pipeline, sarcasm_detection_pipel
         
         inputs = tokenizer(full_text, text_pair=aspect, return_tensors="pt", truncation=True)
         outputs = model(**inputs)
-        print(outputs)
-        probs =  F.softmax(outputs.logits, dim=-1)[0].cpu().tolist()
+        probs = F.softmax(outputs.logits, dim=-1)[0].cpu().tolist()
         id2label = {int(k): v for k, v in model.config.id2label.items()}
         label_probs = {id2label[i].lower(): probs[i] for i in range(len(probs))}
         print(label_probs)
-        score = signed_sent_score(label_probs)
-        label = label_from_signed(score)
+        # 🎯 SIMPLIFIED: Just use the max probability
+        label = max(label_probs.items(), key=lambda x: x[1])[0]
+        pos = label_probs.get("positive", 0)
+        neg = label_probs.get("negative", 0)
+        confidence = max(label_probs.values())
+        score = confidence if label == "positive" else (-confidence if label == "negative" else pos-neg)
         method = "absa"
      
     else:
-        # For the roberta sentiment pipeline, truncate using character count as approximation
-        # or better yet, use the pipeline's tokenizer
-        if len(text) > 500:  # Conservative character limit
+        # Generic sentiment - even simpler!
+        if len(text) > 500:
             text = text[:500]
             
         result = sentiment_analysis_pipeline(text)[0]
-        top_label = result['label'].lower()
-        top_prob = float(result['score'])
-        # naive distribution: assign leftover to neutral
-        if top_label == "positive":
-            label_probs = {"positive": top_prob, "negative": 1 - top_prob - 1e-6, "neutral": 1e-6}
-        elif top_label == "negative":
-            label_probs = {"negative": top_prob, "positive": 1 - top_prob - 1e-6, "neutral": 1e-6}
-        else:
-            label_probs = {"neutral": top_prob, "positive": (1 - top_prob) / 2, "negative": (1 - top_prob) / 2}
-        print(label_probs)
-        score = signed_sent_score(label_probs)
-        label = label_from_signed(score)    
+        label = result['label'].lower()
+        confidence = result['score']
+        score = confidence if label == "positive" else (-confidence if label == "negative" else 0.0)
         method = "generic"
 
+    # Sarcasm detection (keep this logic - it's valuable)
     try:
         if len(text) > 500:
             text = text[:500]
         check_sarcasm, sarcasm_score = analyze_sarcasm(text, sarcasm_detection_pipeline)
     except Exception as e:
         check_sarcasm, sarcasm_score = False, 0.0
-    if check_sarcasm and abs(sarcasm_score) > 0.5  :
-        score = -0.75 * score
-        label = label_from_signed(score)
-    return {"label": label, "score": score, "method": method}
+    
+    if check_sarcasm and abs(sarcasm_score) > 0.5:
+        # Flip sentiment if sarcastic
+        if label == "positive":
+            label = "negative"
+            score = -abs(score)
+        elif label == "negative":
+            label = "positive"
+            score = abs(score)
+    
+    return {
+        "label": label, 
+        "score": score, 
+        "confidence": confidence,
+        "method": method,
+        "sarcasm_detected": check_sarcasm
+    }
 
 @torch.inference_mode()
 def analyze_sarcasm(text, sarcasm_detection_pipeline):

@@ -1,30 +1,30 @@
 Text,Title,Aspect,Sentiment,Sarcasm Flag,Predicted Sentiment,Predicted Sarcasm
-"Yesterday's fall in Crypto has shaken all the crypto enthusiasts. Heard that many finfluencers have gone bankrupt. I expect these crypto exchanges to face trouble (not regulatory, but liquidity). Still fancy Crypto?",Is Crypto still the right choice baby?,Crypto,Negative,FALSE,negative,FALSE
+"Yesterday's fall in Crypto has shaken all the crypto enthusiasts. Heard that many finfluencers have gone bankrupt. I expect these crypto exchanges to face trouble (not regulatory, but liquidity). Still fancy Crypto?",Is Crypto still the right choice baby?,Crypto,Negative,False,negative,False
 "Another real estate player is heading for an IPO/stock market listing. The company has a total of 77 lakh sq. ft. of space, out of which 70 lakh sq. ft. is operational, with a desk capacity of 1.03 lakh. It currently employs over 500 people. The proposed IPO is valued at ₹3,000 crore, with a price band of ₹615–₹648 per share.
 
 What is your thoughts on this?
 
-I think investors want liquidity thats it.",WeWork IPO,WeWork,Neutral,FALSE,neutral,FALSE
-,Is it true? Has Kota become this empty?,Kota,Neutral,FALSE,negative,FALSE
+I think investors want liquidity thats it.",WeWork IPO,WeWork,Neutral,False,neutral,False
+,Is it true? Has Kota become this empty?,Kota,Neutral,False,negative,False
 "Today, I hosted my first Couchsurfing guest, a foreign tourist. I took him to Chandni Chowk, Red Fort, and Jama Masjid and India Gate thinking he’d enjoy the experience. But instead of feeling happy, I felt embarrassed.
 
 The streets were too crowded with poor management, and there was garbage everywhere—plastic bags, wrappers, and waste just flying around. The air was so polluted that my guest was having trouble breathing. He was literally feeling that there is something stucked in his throat. But I was completely fine. Not because the air was clean, but because I’m just used to it. And that made me realize something—we’ve all just accepted this.
 
 I'm living in Delhi since my birth, but today, I saw it differently. It’s like I was looking at my own city through a tourist’s eyes for the first time. And honestly, it didn’t feel good.
 
-But I must say, New Delhi, City Centre part were little better as compared to Old Delhi.","Took a tourist around Delhi, and now I feel ashamed",Delhi,Negative,FALSE,negative,FALSE
-"Hear me out. This might sound extreme, but I genuinely believe it’s time to consider abandoning Delhi. Here’s why: 1. Not the First Time: Abandoning a city isn’t unheard of. History shows us that many cities have been left behind for various reasons—wars, disasters, resource depletion. Delhi would just be the biggest one. (Attaching a list of abandoned cities below for context.) 2. Distribution: I get it, this isn’t a perfect solution. But relocating Delhi’s population across smaller cities could help reduce strain on resources and make a dent in urban pollution nationwide.",HOT TAKE : Delhi Should be Abandoned.,Delhi,Negative,FALSE,positive,FALSE
-,Gavin Newsom surges in new 2028 primary poll,Gavin Newsom,Positive,FALSE,positive,FALSE
-He’s like the only person in politics trying to shine a light on the double standard that’s been going on since Trump got into politics.,Newsom is on fire!,Gavin Newsom,Positive,FALSE,positive,FALSE
-Pritzker is doing a great job at ruining Chicago,State of Chicago,Pritzker,Negative,TRUE,negative,TRUE
-Yes… throw in a corrupt billionaire to replace the current corrupt billionaire. But it’s okay because he’s a democrat.,"If JB Pritzker won the 2028 election, how would you react?",Pritzker,Negative,TRUE,negative,FALSE
+But I must say, New Delhi, City Centre part were little better as compared to Old Delhi.","Took a tourist around Delhi, and now I feel ashamed",Delhi,Negative,False,negative,False
+"Hear me out. This might sound extreme, but I genuinely believe it’s time to consider abandoning Delhi. Here’s why: 1. Not the First Time: Abandoning a city isn’t unheard of. History shows us that many cities have been left behind for various reasons—wars, disasters, resource depletion. Delhi would just be the biggest one. (Attaching a list of abandoned cities below for context.) 2. Distribution: I get it, this isn’t a perfect solution. But relocating Delhi’s population across smaller cities could help reduce strain on resources and make a dent in urban pollution nationwide.",HOT TAKE : Delhi Should be Abandoned.,Delhi,Negative,False,positive,False
+,Gavin Newsom surges in new 2028 primary poll,Gavin Newsom,Positive,False,positive,False
+He’s like the only person in politics trying to shine a light on the double standard that’s been going on since Trump got into politics.,Newsom is on fire!,Gavin Newsom,Positive,False,positive,False
+Pritzker is doing a great job at ruining Chicago,State of Chicago,Pritzker,Negative,True,negative,True
+Yes… throw in a corrupt billionaire to replace the current corrupt billionaire. But it’s okay because he’s a democrat.,"If JB Pritzker won the 2028 election, how would you react?",Pritzker,Negative,True,negative,False
 "I’ve been in the industry for years and know a lot of people who have gone to various companies. No one seems happy. People are doing the job of 3 or more people. Companies are cutting back on everything and laying people off left and right. Everyone is stressed out and hates their job. I know people from at least 10 companies that I’ve talked to recently and they all say they hate their company right now. Many are looking to jump ship.
 
-What the hell is going on??",Is anybody happy in pharma anymore?,pharma,Negative,FALSE,negative,FALSE
-Well that's five seconds of my life down the drain,Casual convos,,Negative,TRUE,negative,FALSE
-And this is assuming DJT makes it to 2029. I hope DJT does. Because MAGots need to see that stupid choices result in stupid policies. The only exception being if he is putting Americans directly in harms way … like posting the movements of nuclear submarines on social media. That seems asinine.,Donald Trump Won’t Honor The Peaceful Transfer Of Power In 2028-2029.,Trump,Negative,FALSE,negative,FALSE
-Pakistan is getting cooked big time by its army,Pakistan's future,Pakistan,Negative,FALSE,negative,TRUE
-,BREAKING: Trump Claims Biden’s Dog Ate Epstein List,Trump,Negative,TRUE,negative,FALSE
+What the hell is going on??",Is anybody happy in pharma anymore?,pharma,Negative,False,negative,False
+Well that's five seconds of my life down the drain,Casual convos,,Negative,True,negative,False
+And this is assuming DJT makes it to 2029. I hope DJT does. Because MAGots need to see that stupid choices result in stupid policies. The only exception being if he is putting Americans directly in harms way … like posting the movements of nuclear submarines on social media. That seems asinine.,Donald Trump Won’t Honor The Peaceful Transfer Of Power In 2028-2029.,Trump,Negative,False,negative,False
+Pakistan is getting cooked big time by its army,Pakistan's future,Pakistan,Negative,False,negative,True
+,BREAKING: Trump Claims Biden’s Dog Ate Epstein List,Trump,Negative,True,negative,False
 "I flew into Geneva from the USA and spent my first day exploring Montreux and the Lavaux vineyards. The next morning, I took the GoldenPass Express to Spiez, spent a night there, and visited Lake Oeschinen the following day.
 
 After that I headed to Lauterbrunnen, where I planned to stay for four nights. The weather wasn’t great—all day rain and dense fog—so I decided to move on to Zermatt for two nights.
@@ -33,23 +33,35 @@ From Zermatt, I went to Lucerne for two nights. I’d hoped to do some hikes but
 
 I wrapped up my trip in Zurich with a day trip to do the Pizol 5 Lakes Hike!
 
-Even though the weather didn’t go as planned, I still had an amazing time—Switzerland is absolutely beautiful",Switzerland is breathtaking,Switzerland,Positive,FALSE,positive,FALSE
-My favourite part of Biden was how he ruined the country's economy for personal gains,Biden as President,Biden,Negative,TRUE,negative,TRUE
-"If Americans are that brain dead to pick a talk show host for president, might as well be a funny one.",This is what liberalism does to your brain,Americans,Negative,TRUE,negative,TRUE
-"I’m looking for some good Netflix recommendations and thought I’d ask around before diving into another random binge. I usually love shows like Breaking Bad, Better Call Saul, and You.But I’m also in the mood to try something completely different like a hidden gem I wouldn’t normally go for.",I’m looking for some good Netflix recommendations,Netflix,Neutral,FALSE,neutral,FALSE
-Dept Q is superb. I love crime shows and police shows so I watched loads and loads of them. Dept Q was one of the most intriguing shows I have watched and the best part is that the plot is very tight until the very end of the story. You’ll love it too.,Dept Q is great. I watched the whole thing in one day.,Dept Q,Positive,FALSE,positive,FALSE
-The law and order in Y is soo good that people would rather move to taliban controlled Afghanistan,What do you make of Y ?,Y,Negative,TRUE,neutral,TRUE
-"Armageddon is cut together like its own highlights. Take almost any 30 seconds at random, and you'd have a TV ad. No matter what they're charging to get in, it's worth more to get out.",Movie review,Armageddon,Negative,TRUE,neutral,FALSE
-The new Jurassic Park movie is simply a celebration of failed ambition,Jurassic Park review,Jurassic Park,Negative,TRUE,negative,TRUE
-Taliban congratulate Americans for electing Trump and ‘not handing leadership of their great country to a woman,Taliban MAGA: Make Afghanistan Great Again.,Trump,Negative,TRUE,neutral,TRUE
+Even though the weather didn’t go as planned, I still had an amazing time—Switzerland is absolutely beautiful",Switzerland is breathtaking,Switzerland,Positive,False,positive,False
+My favourite part of Biden was how he ruined the country's economy for personal gains,Biden as President,Biden,Negative,True,negative,True
+"If Americans are that brain dead to pick a talk show host for president, might as well be a funny one.",This is what liberalism does to your brain,Americans,Negative,True,negative,True
+"I’m looking for some good Netflix recommendations and thought I’d ask around before diving into another random binge. I usually love shows like Breaking Bad, Better Call Saul, and You.But I’m also in the mood to try something completely different like a hidden gem I wouldn’t normally go for.",I’m looking for some good Netflix recommendations,Netflix,Neutral,False,neutral,False
+Dept Q is superb. I love crime shows and police shows so I watched loads and loads of them. Dept Q was one of the most intriguing shows I have watched and the best part is that the plot is very tight until the very end of the story. You’ll love it too.,Dept Q is great. I watched the whole thing in one day.,Dept Q,Positive,False,positive,False
+The law and order in Y is soo good that people would rather move to taliban controlled Afghanistan,What do you make of Y ?,Y,Negative,True,neutral,True
+"Armageddon is cut together like its own highlights. Take almost any 30 seconds at random, and you'd have a TV ad. No matter what they're charging to get in, it's worth more to get out.",Movie review,Armageddon,Negative,True,neutral,False
+The new Jurassic Park movie is simply a celebration of failed ambition,Jurassic Park review,Jurassic Park,Negative,True,negative,True
+Taliban congratulate Americans for electing Trump and ‘not handing leadership of their great country to a woman,Taliban MAGA: Make Afghanistan Great Again.,Trump,Negative,True,neutral,True
 "Shubman Gill has taken the place of two of the Indian cricket greats at No.4 in place of Kohli and a captain in place of Rohit. It is very natural of their fans to hate Gill for it. Then there are Iyer, KL and Pant fans who are gonna spew as much hatred as possible because their favourite player didn't get what Gill got. Of course, the old Gill haters are gonna continue their work of spreading hatred on him.
 
 England series will not be easy as the team is fairly new and there's absence of two great players Rohit and Kohli. It will be definitely challenging for Gill as a batter and a captain.
 
-I pray that he performs and shuts the mouth of all his haters. This series is a make or break for Gill, I hope he succeeds.",Unreal hate for Gill,Shubman Gill,Positive,FALSE,negative,FALSE
+I pray that he performs and shuts the mouth of all his haters. This series is a make or break for Gill, I hope he succeeds.",Unreal hate for Gill,Shubman Gill,Positive,False,negative,False
 "Fox News in a recent lawsuit admitted they are not a real news reporting station, it's a show to entertain you. PERIOD
 
-Only brain dead people think it's real",Only idiots take Fox News seriously,Fox News,Negative,TRUE,negative,TRUE
-Moved to Atlanta last week,My New Apartment in Atlanta,Atlanta,Neutral,FALSE,neutral,FALSE
-"I’m pretty sure that she’s going to run for president in 2028 and if she does I’m going to vote for her (more than that, I will be EXCITED to vote for her). ",I want to talk about AOC,AOC,Positive,FALSE,positive,FALSE
-"The Weeknd is no stranger to success, he's been in the limelight since 2015 when he dropped his first hit album Beauty Behind The Madness, and since then he skyrocketed. He has sales and streams, and he got hits on top of hits. Arguably the best hitmaker of the last decade","The Weeknd is one of the greats, and it's not debatable",Weeknd,Positive,FALSE,positive,FALSE
+Only brain dead people think it's real",Only idiots take Fox News seriously,Fox News,Negative,True,negative,True
+Moved to Atlanta last week,My New Apartment in Atlanta,Atlanta,Neutral,False,neutral,False
+"I’m pretty sure that she’s going to run for president in 2028 and if she does I’m going to vote for her (more than that, I will be EXCITED to vote for her). ",I want to talk about AOC,AOC,Positive,False,positive,False
+"The Weeknd is no stranger to success, he's been in the limelight since 2015 when he dropped his first hit album Beauty Behind The Madness, and since then he skyrocketed. He has sales and streams, and he got hits on top of hits. Arguably the best hitmaker of the last decade","The Weeknd is one of the greats, and it's not debatable",Weeknd,Positive,False,positive,False
+"How to Enter:
+Upvote then just leave a comment on this post. That’s it!
+
+Requirements:
+Your Reddit account must be 15 days or older
+
+You must be subscribed to r/Battlefield",Battlefield 6 Phantom,Battlefield ,Neutral,False,neutral,False
+I found a long-dead moth in a woodpile. Decided to take its portrait using high magnification macro photography.,"The scales on a moth's wing, magnified quite a lot",moth,Neutral,False,neutral,False
+He thinks he's being clever because he's not technically lying he's just saying nothing of meaning with as many words as possible.,"JD Vance sickening deflection gets him kicked off live tv. Also, he’s starting to sound like Trump more and more",JD Vance,Negative,False,negative,False
+Russia plans to hire one million Indian workers by year's end. This move addresses labour shortages in industrial regions like Sverdlovsk. The Ural Chamber of Commerce and Industry confirms this initiative. A new consulate in Yekaterinburg will manage the process,Russia to import 1 million skilled workforce from India,India,Positive,False,positive,False
+"Wow, thanks President Trump I love not having health insurance.",Health insurance cuts,Trump,Negative,True,positive,True
+It’s a fun place. We had a great time at night. Very interesting place from a cultural perspective too.,Singapore is breathtaking.,Singapore,Positive,False,positive,False
