@@ -145,8 +145,6 @@ from model_tuning import fine_tune_model
 model, tokenizer = fine_tune_model()
 ```
 
-See [FINE_TUNING.md](FINE_TUNING.md) for detailed instructions.
-
 ## Model Performance
 
 | Model | Accuracy | Use Case |
