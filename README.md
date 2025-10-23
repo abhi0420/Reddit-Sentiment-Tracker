@@ -1,4 +1,4 @@
-# 🎯 Reddit Sentiment Tracker
+# Reddit Sentiment Tracker
 
 > An advanced sentiment analysis system for Reddit posts using fine-tuned transformers and multi-model ensemble approach.
 
